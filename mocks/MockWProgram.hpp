@@ -31,6 +31,7 @@
 #define MOCKWPROGRAM_H_
 
 #include "inttypes.h"
+#include <exception>
 
 // Compiler warning to indicate test header being used to catch include errors.
 // Remove this if you're confident everything works as planned.
@@ -256,15 +257,19 @@ extern uint8_t digital_pins[];
 extern float analog_pins[];
 
 /*!
-  \brief Error condition variable. 
-  This is set when digitalWrite or pinMode are called with values out of the 
-  allowable range and is reset on a call to clear().
- */
-extern uint8_t error;
-
-/*!
   \brief Shared Serial object.
  */
 extern MockSerial Serial;
+
+
+struct NoSuchPinException : public std::logic_error {
+    NoSuchPinException(uint8_t pin) : std::logic_error("Pin " + std::string(pin) + " does not exist")
+    {}
+};
+
+struct InvalidPinValueException : public std::logic_error {
+    InvalidPinValueException() : std::logic_error("Invalid digital value")
+    {}
+};
 
 #endif /* MOCKWPROGRAM_H_ */

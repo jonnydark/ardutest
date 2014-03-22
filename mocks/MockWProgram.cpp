@@ -15,29 +15,27 @@
 
 uint8_t digital_pins[14] = { 0x00 };
 float analog_pins[6] = { 0.0 };
-uint8_t error = 0;
 
 void clear_pins(void){
 	digital_pins[14] = { 0x00 };
 	analog_pins[6] = { 0.0 };
-	error = 0;
 }
 
 void pinMode(uint8_t pin, uint8_t mode) {
 	if (pin < 0 || pin > 13) {
-		error = 1;
+		throw NoSuchPinException(pin);
 	}
 	if (mode != OUTPUT && mode != INPUT) {
-		error = 1;
+		throw InvalidPinValueException();
 	}
 }
 
 void digitalWrite(uint8_t pin, uint8_t level) {
 	if (pin < 0 || pin > 13) {
-		error = 1;
+		throw NoSuchPinException(pin);
 	}
 	if (level != LOW && level != HIGH) {
-		error = 1;
+		throw InvalidPinValueException();
 	}
 	digital_pins[pin] = level;
 }
